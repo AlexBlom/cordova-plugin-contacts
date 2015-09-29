@@ -64,7 +64,15 @@
 - (void)newPersonViewController:(ABNewPersonViewController*)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person;
 - (BOOL)personViewController:(ABPersonViewController*)personViewController shouldPerformDefaultActionForPerson:(ABRecordRef)person
                     property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifierForValue;
+
 /*
+ * Launches the contact picker after first checking the iOS version
+
+ * There appears to be a bug in iOS9 where any linked contacts crash the app
+ * The error is "A contact and its snapshot should both be non-unified"
+ *
+ * This can be fixed by request Contact Book permissions
+ * If ios9, we are going to request this before opening the Contact Picker
  * Launches the Contact Picker to select a single contact.
  *
  * arguments:
@@ -73,6 +81,26 @@
  *	desiredFields: ContactFields array to be returned back
  */
 - (void)pickContact:(CDVInvokedUrlCommand*)command;
+
+/*
+ * Launches the Contact Picker to select a single contact after request contacts permission
+ *
+ * arguments:
+ *	1: this is the javascript function that will be called with the contact data as a JSON object (as the first param)
+ * options:
+ *	desiredFields: ContactFields array to be returned back
+ */
+- (void)openContactPickerWithPermission:(CDVInvokedUrlCommand*)command;
+
+/*
+ * Launches the Contact Picker to select a single contact.
+ *
+ * arguments:
+ *	1: this is the javascript function that will be called with the contact data as a JSON object (as the first param)
+ * options:
+ *	desiredFields: ContactFields array to be returned back
+ */
+- (void)openContactPicker:(CDVInvokedUrlCommand*)command;
 
 /*
  * search - searches for contacts.  Only person records are currently supported.
